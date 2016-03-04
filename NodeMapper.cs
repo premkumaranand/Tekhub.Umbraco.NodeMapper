@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Archetype.Models;
 using Tekhub.Umbraco.Extensions;
+using Tekhub.Umbraco.NodeMapper.Core;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 

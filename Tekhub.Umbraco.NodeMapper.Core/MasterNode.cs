@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tekhub.Extensions;
 
-namespace Tekhub.Umbraco.NodeMapper
+namespace Tekhub.Umbraco.NodeMapper.Core
 {
     public class MasterNode
     {
+        private string _pageTitle;
         public MasterNode() { }
 
         public MasterNode(MasterNode toCopy)
@@ -16,20 +18,25 @@ namespace Tekhub.Umbraco.NodeMapper
             Name = toCopy.Name;
             Url = toCopy.Url;
             PageTitle = toCopy.PageTitle;
-            DescriptionMeta = toCopy.DescriptionMeta;
-            TitleMeta = toCopy.TitleMeta;
-            KeyWordsMeta = toCopy.KeyWordsMeta;
+
+            MetaTags = toCopy.MetaTags != null ? 
+                            new NodeMetaTags(toCopy.MetaTags) : 
+                            new NodeMetaTags();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
 
-        public string PageTitle { get; set; }
-        public string DescriptionMeta { get; set; }
-        public string TitleMeta { get; set; }
-        public string KeyWordsMeta { get; set; }
+        public string PageTitle
+        {
+            get { return GetPageTitle(); }
+            set { _pageTitle = value; }
+        }
+
         public DateTime PublishedDate { get; set; }
+
+        public NodeMetaTags MetaTags { get; set; }
 
         public string UrlLastSegment
         {
@@ -39,9 +46,20 @@ namespace Tekhub.Umbraco.NodeMapper
         public virtual void SetProperties(Dictionary<string, object> propertyValueMappings)
         {
             PageTitle = Convert.ToString(propertyValueMappings["pageTitle"]);
-            DescriptionMeta = Convert.ToString(propertyValueMappings["descriptionMeta"]);
-            TitleMeta = Convert.ToString(propertyValueMappings["titleMeta"]);
-            KeyWordsMeta = Convert.ToString(propertyValueMappings["keyWordsMeta"]);
+
+            if (MetaTags == null) return;
+
+            MetaTags.SetProperties(propertyValueMappings);
+
+            if (!MetaTags.HasTitle)
+            {
+                MetaTags.Title = PageTitle;
+            }
+        }
+
+        private string GetPageTitle()
+        {
+            return string.IsNullOrEmpty(_pageTitle) ? Name : _pageTitle;
         }
     }
 }

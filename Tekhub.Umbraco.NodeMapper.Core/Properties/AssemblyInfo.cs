@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Tekhub.Umbraco.NodeMapper")]
+[assembly: AssemblyTitle("Tekhub.Umbraco.NodeMapper.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tekhub.Umbraco.NodeMapper")]
+[assembly: AssemblyProduct("Tekhub.Umbraco.NodeMapper.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("dbdabace-8bd8-4215-854c-173db7012484")]
+[assembly: Guid("0207200e-6cf5-4200-8799-b649dafe1b59")]
 
 // Version information for an assembly consists of the following four values:
 //
