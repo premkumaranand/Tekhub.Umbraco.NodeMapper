@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Archetype.Models;
 using Tekhub.Umbraco.Extensions;
@@ -19,9 +20,25 @@ namespace Tekhub.Umbraco.NodeMapper
             nodeContent.Properties.ForEach(p =>
             {
                 if (p.Value != null)
-                    propertiesMapping[p.PropertyTypeAlias] = p.Value.GetType() == typeof (ArchetypeModel)
-                                                                    ? MapArchetypeModel(p)
-                                                                    : p.Value;
+                {
+                    if (p.Value.GetType() == typeof (ArchetypeModel))
+                    {
+                        propertiesMapping[p.PropertyTypeAlias] = MapArchetypeModel(p);
+                    }
+                    else
+                    {
+                        if (p.PropertyTypeAlias.InvariantEquals("Umbraco.DropDown") ||
+                            p.PropertyTypeAlias.InvariantEquals("Umbraco.DropdownlistPublishingKeys"))
+                        {
+                            var value = umbraco.library.GetPreValueAsString(Convert.ToInt32(p.Value));
+                            propertiesMapping[p.PropertyTypeAlias] = Regex.Replace(value, @"([a-z])([A-Z])", "$1-$2").ToLower();
+                        }
+                        else
+                        {
+                            propertiesMapping[p.PropertyTypeAlias] = p.Value;
+                        }
+                    }
+                }
                 else
                 {
                     propertiesMapping[p.PropertyTypeAlias] = null;
@@ -55,7 +72,24 @@ namespace Tekhub.Umbraco.NodeMapper
                 var mappedPropIter = new Dictionary<string, object>();
                 foreach (var propIter in fieldSetIter.Properties)
                 {
-                    mappedPropIter[propIter.Alias] = propIter.Value;
+                    var propEditorAlias = propIter.PropertyEditorAlias;
+                    if (propEditorAlias.InvariantEquals("Umbraco.DropDown") ||
+                        propEditorAlias.InvariantEquals("Umbraco.DropdownlistPublishingKeys"))
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(propIter.Value)))
+                        {
+                            mappedPropIter[propIter.Alias] = propIter.Value;
+                        }
+                        else
+                        {
+                            var value = umbraco.library.GetPreValueAsString(Convert.ToInt32(propIter.Value));
+                            mappedPropIter[propIter.Alias] = Regex.Replace(value, @"([a-z])([A-Z])", "$1-$2").ToLower();
+                        }
+                    }
+                    else
+                    {
+                        mappedPropIter[propIter.Alias] = propIter.Value;
+                    }
                 }
 
                 mappedProps.Add(mappedPropIter);

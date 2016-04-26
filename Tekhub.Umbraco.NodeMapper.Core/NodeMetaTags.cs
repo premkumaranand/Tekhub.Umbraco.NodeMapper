@@ -28,9 +28,20 @@ namespace Tekhub.Umbraco.NodeMapper.Core
 
         public void SetProperties(Dictionary<string, object> propertyValueMappings)
         {
-            Title = Convert.ToString(propertyValueMappings["titleMeta"]);
-            Description = Convert.ToString(propertyValueMappings["descriptionMeta"]);
-            Keywords = Convert.ToString(propertyValueMappings["keywordsMeta"]);
+            if (propertyValueMappings.ContainsKey("titleMeta"))
+            {
+                Title = Convert.ToString(propertyValueMappings["titleMeta"]);
+            }
+
+            if (propertyValueMappings.ContainsKey("descriptionMeta"))
+            {
+                Description = Convert.ToString(propertyValueMappings["descriptionMeta"]);
+            }
+
+            if (propertyValueMappings.ContainsKey("keywordsMeta"))
+            {
+                Keywords = Convert.ToString(propertyValueMappings["keywordsMeta"]);
+            }
         }
     }
 }

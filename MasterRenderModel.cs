@@ -23,5 +23,13 @@ namespace Tekhub.Umbraco.NodeMapper
         {
             NodeContent = nodeContent;
         }
+
+        public static implicit operator MasterRenderModel<MasterNode>(MasterRenderModel<T> toCopy)
+        {
+            return new MasterRenderModel<MasterNode>(toCopy.Content)
+            {
+                NodeContent = toCopy.NodeContent
+            };
+        }
     }
 }

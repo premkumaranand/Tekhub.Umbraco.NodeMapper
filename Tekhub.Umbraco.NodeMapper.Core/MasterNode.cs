@@ -10,7 +10,11 @@ namespace Tekhub.Umbraco.NodeMapper.Core
     public class MasterNode
     {
         private string _pageTitle;
-        public MasterNode() { }
+
+        public MasterNode()
+        {
+            MetaTags = new NodeMetaTags();
+        }
 
         public MasterNode(MasterNode toCopy)
         {
@@ -45,7 +49,10 @@ namespace Tekhub.Umbraco.NodeMapper.Core
 
         public virtual void SetProperties(Dictionary<string, object> propertyValueMappings)
         {
-            PageTitle = Convert.ToString(propertyValueMappings["pageTitle"]);
+            if (propertyValueMappings.ContainsKey("pageTitle"))
+            {
+                PageTitle = Convert.ToString(propertyValueMappings["pageTitle"]);
+            }
 
             if (MetaTags == null) return;
 
